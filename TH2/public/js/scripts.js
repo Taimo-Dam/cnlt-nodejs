@@ -1,2 +1,3 @@
-// Basic JavaScript
-console.log('Script loaded');
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
