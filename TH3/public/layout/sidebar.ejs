@@ -1,0 +1,37 @@
+<div class="sidebar" id="sidebar">
+  <nav class="sidebar-nav">
+    <a href="/" class="nav-link" data-title="Home"><i class="bx bxs-home"></i><span>Home</span></a>
+    <a href="/songs" class="nav-link" data-title="Songs"><i class="fas fa-compact-disc"></i><span>Songs</span></a>
+    <a href="/albums" class="nav-link" data-title="Albums"><i class="fas fa-compact-disc"></i><span>Albums</span></a>
+    <a href="/artists" class="nav-link" data-title="Artists"><i class="fas fa-microphone"></i><span>Artists</span></a>
+
+    <div class="sidebar-content">
+      <ul class="nav-list">
+        <li class="nav-category">Library</li>
+        <li class="nav-item"><a href="/recent" class="nav-link" data-title="Recently Added"><i class="fas fa-history"></i><span>Recently Added</span></a></li>
+        <li class="nav-item"><a href="/most-played" class="nav-link" data-title="Most Played"><i class="fas fa-fire"></i><span>Most Played</span></a></li>
+        <li class="nav-category">Playlist and Favorite</li>
+        <li class="nav-item"><a href="/favorites" class="nav-link" data-title="Your Favorites"><i class="fas fa-heart"></i><span>Your Favorites</span></a></li>
+        <li class="nav-item"><a href="/create-playlist" class="nav-link blue" data-title="Add Playlist"><i class="fas fa-plus"></i><span>Add Playlist</span></a></li>
+        <li class="nav-category">General</li>
+        <li class="nav-item"><a href="/settings" class="nav-link" data-title="Settings"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+      </ul>
+    </div>
+  </nav>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  const menuToggle = document.getElementById('menuToggle');
+
+  const setSidebarOpen = open => {
+    sidebar.classList.toggle('open', open);
+    overlay.classList.toggle('show', open);
+  };
+
+  menuToggle?.addEventListener('click', () => setSidebarOpen(!sidebar.classList.contains('open')));
+  overlay?.addEventListener('click', () => setSidebarOpen(false));
+</script>

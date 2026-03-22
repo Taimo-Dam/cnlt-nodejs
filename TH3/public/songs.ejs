@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= title %> | M&U</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <%- include('layout/header', { query: '', searchResults: [] }) %>
+  <%- include('layout/sidebar') %>
+
+  <main class="main-content">
+    <h1>Songs</h1>
+    <p>Here are your songs (static for now).</p>
+  </main>
+
+  <%- include('layout/footer') %>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<header class="header">
+  <div class="header-left">
+    <a href="/" class="logo">M&amp;U</a>
+
+    <div class="search-container">
+      <form action="/search" method="GET" class="search-form">
+        <input
+          type="text"
+          name="query"
+          value="<%= query ? query : '' %>"
+          placeholder="Search For Musics, Artists, ..."
+          class="search-input"
+          minlength="2"
+          autocomplete="off"
+          required
+        />
+        <button type="submit" class="search-button">
+          <i class="fas fa-search"></i>
+        </button>
+      </form>
+      <div class="search-results <%= searchResults && searchResults.length ? 'show' : '' %>" id="searchResults">
+        <% if (searchResults && searchResults.length) { %>
+          <div class="result-section">
+            <h3>Results</h3>
+            <ul>
+              <% searchResults.forEach((item) => { %>
+                <li class="result-item">
+                  <span class="result-title"><%= item.name %></span>
+                  <small><%= item.artist %></small>
+                </li>
+              <% }) %>
+            </ul>
+          </div>
+        <% } else if (query) { %>
+          <div class="no-results">No results found for "<%= query %>".</div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <nav>
+      <a href="/about">About Us</a>
+      <a href="/contact">Contact</a>
+      <a href="/premium">Premium</a>
+      <a href="/login">Login</a>
+      <a href="/register"><button class="button">Sign up</button></a>
+    </nav>
+  </div>
+</header>
