@@ -1,3 +1,15 @@
+const { MongoClient } = require("mongodb");
+const uri = "mongodb://localhost:27017";
+const client = new MongoClient(uri);
+
+async function run() {
+  await client.connect();
+  const db = client.db("meandyoudb");
+  const users = db.collection("users");
+  const result = await users.find().toArray();
+  console.log(result);
+}
+run();
 const express = require('express');
 const path = require('path');
 const app = express();
