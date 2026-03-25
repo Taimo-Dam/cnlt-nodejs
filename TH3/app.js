@@ -1,15 +1,19 @@
-const { MongoClient } = require("mongodb");
-const uri = "mongodb://localhost:27017";
-const client = new MongoClient(uri);
+const mongoose = require("mongoose");
 
-async function run() {
-  await client.connect();
-  const db = client.db("meandyoudb");
-  const users = db.collection("users");
-  const result = await users.find().toArray();
-  console.log(result);
-}
-run();
+mongoose.connect("mongodb://localhost:27017/myprojectdb")
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.error(err));
+
+const UserSchema = new mongoose.Schema({
+  name: String,
+  email: String
+});
+
+const User = mongoose.model("User", UserSchema);
+
+User.create({ name: "Alice", email: "alice@example.com" })
+  .then(doc => console.log(doc))
+  .catch(err => console.error(err));
 const express = require('express');
 const path = require('path');
 const app = express();
