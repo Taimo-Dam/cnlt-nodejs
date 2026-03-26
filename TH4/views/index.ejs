@@ -105,7 +105,6 @@
         <span class="section-count"><%= posts.length %> bài viết</span>
       </div>
 
-      <!-- Bài mới nhất: featured -->
       <div class="featured">
         <div class="featured-img">✦</div>
         <div class="featured-content">
@@ -123,7 +122,6 @@
         </div>
       </div>
 
-      <!-- 3 bài tiếp: grid -->
       <% if (posts.length > 1) { %>
         <div class="post-grid">
           <% posts.slice(1, 4).forEach(post => { %>
@@ -137,7 +135,6 @@
         </div>
       <% } %>
 
-      <!-- Còn lại: list -->
       <% if (posts.length > 4) { %>
         <div class="section-header" style="margin-top: 40px;">
           <span class="section-label">Tất cả bài viết</span>
