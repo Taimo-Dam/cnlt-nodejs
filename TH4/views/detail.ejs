@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= post.title %> — The Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #111; --white: #fff;
+      --gray-light: #f4f3ef; --gray-mid: #e0deda;
+      --gray-text: #888; --accent: #c0392b;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--gray-light); color: var(--black); min-height: 100vh; }
+
+    header { background: var(--white); border-bottom: 2px solid var(--black); }
+    .header-top { display: flex; justify-content: space-between; align-items: center; padding: 18px 48px; }
+    .logo { font-family: 'Playfair Display', serif; font-size: 26px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; color: var(--black); }
+    .back-link { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-text); text-decoration: none; transition: color 0.2s; }
+    .back-link:hover { color: var(--black); }
+    .header-date { text-align: center; font-size: 11px; letter-spacing: 1px; color: var(--gray-text); padding: 6px; border-top: 1px solid var(--gray-mid); }
+
+    .container { max-width: 720px; margin: 60px auto; padding: 0 24px 80px; }
+
+    /* ARTICLE HEADER */
+    .article-meta { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+    .tag { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); border-top: 2px solid var(--accent); padding-top: 6px; display: inline-block; }
+    .meta-date { font-size: 12px; color: var(--gray-text); }
+    .meta-sep { width: 1px; height: 14px; background: var(--gray-mid); }
+
+    .article-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      line-height: 1.25;
+      margin-bottom: 28px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--gray-mid);
+    }
+
+    /* ARTICLE BODY */
+    .article-body {
+      font-size: 16px;
+      line-height: 1.85;
+      color: #333;
+      white-space: pre-wrap;
+    }
+
+    .article-body::first-letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 52px;
+      font-weight: 700;
+      float: left;
+      line-height: 0.85;
+      margin: 6px 10px 0 0;
+      color: var(--black);
+    }
+
+    /* FOOTER NAV */
+    .article-footer {
+      margin-top: 56px;
+      padding-top: 24px;
+      border-top: 2px solid var(--black);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--black);
+      text-decoration: none; transition: gap 0.2s;
+    }
+    .back-btn:hover { gap: 10px; }
+
+    .new-btn {
+      font-size: 11px; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--gray-text);
+      text-decoration: none;
+    }
+    .new-btn:hover { color: var(--black); }
+
+    @media (max-width: 600px) {
+      .header-top { padding: 14px 20px; }
+      .container { padding: 0 16px 60px; margin-top: 32px; }
+      .article-title { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-top">
+      <a href="/" class="logo">The Blog</a>
+      <a href="/" class="back-link">← Tất cả bài viết</a>
+    </div>
+    <div class="header-date">
+      <%= new Date().toLocaleDateString('vi-VN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="article-meta">
+      <span class="tag">Bài viết</span>
+      <% if (post.createdAt) { %>
+        <span class="meta-sep"></span>
+        <span class="meta-date"><%= post.createdAt.toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+      <% } %>
+    </div>
+
+    <h1 class="article-title"><%= post.title %></h1>
+
+    <div class="article-body"><%= post.body %></div>
+
+    <div class="article-footer">
+      <a href="/" class="back-btn">← Quay lại trang chủ</a>
+      <a href="/blogposts/new" class="new-btn">Viết bài mới +</a>
+    </div>
+  </div>
+</body>
+</html>

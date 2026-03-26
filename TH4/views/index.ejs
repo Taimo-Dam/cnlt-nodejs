@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #111; --white: #fff;
+      --gray-light: #f4f3ef; --gray-mid: #e0deda;
+      --gray-text: #888; --accent: #c0392b;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--gray-light); color: var(--black); min-height: 100vh; }
+
+    /* HEADER */
+    header { background: var(--white); border-bottom: 2px solid var(--black); }
+    .header-top { display: flex; justify-content: space-between; align-items: center; padding: 18px 48px; }
+    .logo { font-family: 'Playfair Display', serif; font-size: 26px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; color: var(--black); }
+    nav { display: flex; align-items: center; gap: 28px; }
+    nav a { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-text); text-decoration: none; transition: color 0.2s; }
+    nav a:hover { color: var(--black); }
+    .btn-new { background: var(--black) !important; color: var(--white) !important; padding: 8px 18px; border-radius: 2px; }
+    .btn-new:hover { background: var(--accent) !important; color: var(--white) !important; }
+    .header-date { text-align: center; font-size: 11px; letter-spacing: 1px; color: var(--gray-text); padding: 6px; border-top: 1px solid var(--gray-mid); }
+
+    /* LAYOUT */
+    .container { max-width: 1060px; margin: 0 auto; padding: 40px 48px; }
+    .section-header { display: flex; justify-content: space-between; align-items: baseline; border-top: 2px solid var(--black); padding-top: 10px; margin-bottom: 28px; }
+    .section-label { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; }
+    .section-count { font-size: 11px; color: var(--gray-text); }
+
+    /* EMPTY */
+    .empty { text-align: center; padding: 80px 20px; color: var(--gray-text); border: 1px dashed var(--gray-mid); background: var(--white); }
+    .empty p { font-size: 14px; margin-bottom: 16px; }
+    .empty a { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--black); text-decoration: none; border-bottom: 2px solid var(--black); padding-bottom: 2px; }
+
+    /* FEATURED */
+    .featured { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--gray-mid); background: var(--white); margin-bottom: 2px; }
+    .featured-img { background: var(--gray-mid); min-height: 280px; display: flex; align-items: center; justify-content: center; font-size: 52px; opacity: 0.25; }
+    .featured-content { padding: 32px 36px; border-left: 1px solid var(--gray-mid); display: flex; flex-direction: column; justify-content: space-between; }
+    .tag { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); border-top: 2px solid var(--accent); padding-top: 6px; display: inline-block; margin-bottom: 12px; }
+    .featured-title { font-family: 'Playfair Display', serif; font-size: 24px; line-height: 1.35; margin-bottom: 14px; }
+    .featured-body { font-size: 14px; color: #555; line-height: 1.75; flex: 1; }
+    .card-meta { font-size: 11px; color: var(--gray-text); margin-top: 20px; }
+    .read-more { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--black); text-decoration: none; margin-top: 10px; transition: gap 0.2s; }
+    .read-more:hover { gap: 12px; }
+
+    /* GRID */
+    .post-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--gray-mid); border: 1px solid var(--gray-mid); border-top: none; margin-bottom: 2px; }
+    .post-card { background: var(--white); padding: 24px; display: flex; flex-direction: column; }
+    .post-card-title { font-size: 15px; font-weight: 600; line-height: 1.4; margin-bottom: 10px; }
+    .post-card-body { font-size: 13px; color: #666; line-height: 1.7; flex: 1; }
+    .post-card-link { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--black); text-decoration: none; margin-top: 16px; display: inline-block; border-bottom: 1px solid var(--gray-mid); padding-bottom: 2px; transition: border-color 0.2s; }
+    .post-card-link:hover { border-color: var(--black); }
+
+    /* LIST */
+    .post-list-link { display: block; text-decoration: none; color: inherit; }
+    .post-list-item { background: var(--white); border: 1px solid var(--gray-mid); border-top: none; padding: 18px 28px; display: grid; grid-template-columns: 36px 1fr auto; gap: 20px; align-items: center; transition: background 0.15s; }
+    .post-list-link:first-child .post-list-item { border-top: 1px solid var(--gray-mid); }
+    .post-list-link:hover .post-list-item { background: var(--gray-light); }
+    .post-num { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--gray-mid); }
+    .post-list-title { font-size: 14px; font-weight: 500; }
+    .post-list-link:hover .post-list-title { text-decoration: underline; }
+    .post-list-date { font-size: 11px; color: var(--gray-text); white-space: nowrap; }
+
+    /* FOOTER */
+    footer { border-top: 2px solid var(--black); background: var(--white); padding: 20px 48px; display: flex; justify-content: space-between; align-items: center; margin-top: 60px; }
+    footer span { font-size: 11px; color: var(--gray-text); letter-spacing: 0.5px; }
+
+    @media (max-width: 700px) {
+      .header-top, footer { padding: 14px 20px; }
+      .container { padding: 24px 20px; }
+      .featured { grid-template-columns: 1fr; }
+      .featured-img { min-height: 140px; }
+      .featured-content { border-left: none; border-top: 1px solid var(--gray-mid); }
+      .post-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-top">
+      <a href="/" class="logo">The Blog</a>
+      <nav>
+        <a href="/">Trang chủ</a>
+        <a href="/blogposts/new" class="btn-new">+ Tạo bài viết</a>
+      </nav>
+    </div>
+    <div class="header-date">
+      <%= new Date().toLocaleDateString('vi-VN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
+    </div>
+  </header>
+
+  <div class="container">
+    <% if (posts.length === 0) { %>
+      <div class="empty">
+        <p>Chưa có bài viết nào.</p>
+        <a href="/blogposts/new">Tạo bài viết đầu tiên →</a>
+      </div>
+    <% } else { %>
+      <div class="section-header">
+        <span class="section-label">Bài viết nổi bật</span>
+        <span class="section-count"><%= posts.length %> bài viết</span>
+      </div>
+
+      <!-- Bài mới nhất: featured -->
+      <div class="featured">
+        <div class="featured-img">✦</div>
+        <div class="featured-content">
+          <div>
+            <span class="tag">Mới nhất</span>
+            <div class="featured-title"><%= posts[0].title %></div>
+            <div class="featured-body"><%= posts[0].body.substring(0, 220) %><%= posts[0].body.length > 220 ? '...' : '' %></div>
+          </div>
+          <div>
+            <% if (posts[0].createdAt) { %>
+              <div class="card-meta"><%= posts[0].createdAt.toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' }) %></div>
+            <% } %>
+            <a href="/blogposts/<%= posts[0]._id %>" class="read-more">Đọc tiếp →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 bài tiếp: grid -->
+      <% if (posts.length > 1) { %>
+        <div class="post-grid">
+          <% posts.slice(1, 4).forEach(post => { %>
+            <div class="post-card">
+              <span class="tag">Bài viết</span>
+              <div class="post-card-title"><%= post.title %></div>
+              <div class="post-card-body"><%= post.body.substring(0, 100) %><%= post.body.length > 100 ? '...' : '' %></div>
+              <a href="/blogposts/<%= post._id %>" class="post-card-link">Xem chi tiết →</a>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <!-- Còn lại: list -->
+      <% if (posts.length > 4) { %>
+        <div class="section-header" style="margin-top: 40px;">
+          <span class="section-label">Tất cả bài viết</span>
+          <span class="section-count"><%= posts.length - 4 %> bài khác</span>
+        </div>
+        <% posts.slice(4).forEach((post, i) => { %>
+          <a href="/blogposts/<%= post._id %>" class="post-list-link">
+            <div class="post-list-item">
+              <span class="post-num">0<%= i + 5 %></span>
+              <span class="post-list-title"><%= post.title %></span>
+              <% if (post.createdAt) { %>
+                <span class="post-list-date"><%= post.createdAt.toLocaleDateString('vi-VN') %></span>
+              <% } %>
+            </div>
+          </a>
+        <% }) %>
+      <% } %>
+    <% } %>
+  </div>
+
+  <footer>
+    <span>The Blog &copy; <%= new Date().getFullYear() %></span>
+    <span>Node.js + MongoDB + EJS</span>
+  </footer>
+</body>
+</html>

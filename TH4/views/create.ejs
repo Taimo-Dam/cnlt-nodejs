@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tạo bài viết — The Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #111; --white: #fff;
+      --gray-light: #f4f3ef; --gray-mid: #e0deda;
+      --gray-text: #888; --accent: #c0392b;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--gray-light); color: var(--black); min-height: 100vh; }
+
+    header { background: var(--white); border-bottom: 2px solid var(--black); }
+    .header-top { display: flex; justify-content: space-between; align-items: center; padding: 18px 48px; }
+    .logo { font-family: 'Playfair Display', serif; font-size: 26px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; color: var(--black); }
+    .back-link { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-text); text-decoration: none; transition: color 0.2s; }
+    .back-link:hover { color: var(--black); }
+
+    .container { max-width: 680px; margin: 60px auto; padding: 0 24px; }
+
+    .page-header { border-top: 2px solid var(--black); padding-top: 10px; margin-bottom: 36px; }
+    .page-label { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 10px; }
+    .page-title { font-family: 'Playfair Display', serif; font-size: 28px; line-height: 1.2; }
+
+    .form-wrap { background: var(--white); border: 1px solid var(--gray-mid); padding: 40px 44px; }
+
+    .form-group { margin-bottom: 28px; }
+    label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-text); margin-bottom: 10px; }
+
+    input[type="text"],
+    textarea {
+      width: 100%; border: none; border-bottom: 1.5px solid var(--gray-mid);
+      background: transparent; padding: 10px 0; font-size: 15px;
+      font-family: 'DM Sans', sans-serif; color: var(--black);
+      outline: none; transition: border-color 0.2s; display: block;
+    }
+    input[type="text"]:focus, textarea:focus { border-bottom-color: var(--black); }
+    input[type="text"]::placeholder, textarea::placeholder { color: var(--gray-mid); }
+    textarea { height: 200px; resize: vertical; line-height: 1.7; }
+
+    .form-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 28px; border-top: 1px solid var(--gray-mid); }
+
+    button[type="submit"] {
+      background: var(--black); color: var(--white);
+      border: none; padding: 12px 28px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; transition: background 0.2s;
+    }
+    button[type="submit"]:hover { background: var(--accent); }
+
+    .cancel-link { font-size: 11px; color: var(--gray-text); text-decoration: none; letter-spacing: 0.5px; }
+    .cancel-link:hover { color: var(--black); text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .header-top { padding: 14px 20px; }
+      .container { padding: 0 16px; margin-top: 32px; }
+      .form-wrap { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-top">
+      <a href="/" class="logo">The Blog</a>
+      <a href="/" class="back-link">← Về trang chủ</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="page-header">
+      <span class="page-label">Soạn thảo</span>
+      <h1 class="page-title">Tạo bài viết mới</h1>
+    </div>
+
+    <div class="form-wrap">
+      <form action="/blogposts/store" method="POST">
+        <div class="form-group">
+          <label for="title">Tiêu đề</label>
+          <input type="text" id="title" name="title" placeholder="Nhập tiêu đề bài viết..." required>
+        </div>
+        <div class="form-group">
+          <label for="body">Nội dung</label>
+          <textarea id="body" name="body" placeholder="Nhập nội dung bài viết..." required></textarea>
+        </div>
+        <div class="form-footer">
+          <a href="/" class="cancel-link">Hủy</a>
+          <button type="submit">Đăng bài →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
