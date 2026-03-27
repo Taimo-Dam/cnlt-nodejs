@@ -19,6 +19,7 @@ app.get('/', async (req, res) => {
 app.get('/blogposts/new', (req, res) => {
   res.render('create');
 });
+
 app.post('/blogposts/store', async (req, res) => {
   await BlogPost.create({
     title: req.body.title,
@@ -26,9 +27,28 @@ app.post('/blogposts/store', async (req, res) => {
   });
   res.redirect('/');
 });
+
 app.get('/blogposts/:id', async (req, res) => {
   const post = await BlogPost.findById(req.params.id);
   res.render('detail', { post });
+});
+
+app.get('/blogposts/:id/edit', async (req, res) => {
+  const post = await BlogPost.findById(req.params.id);
+  res.render('edit', { post });
+});
+
+app.post('/blogposts/:id/update', async (req, res) => {
+  await BlogPost.findByIdAndUpdate(req.params.id, {
+    title: req.body.title,
+    body: req.body.body
+  });
+  res.redirect(`/blogposts/${req.params.id}`);
+});
+
+app.post('/blogposts/:id/delete', async (req, res) => {
+  await BlogPost.findByIdAndDelete(req.params.id);
+  res.redirect('/');
 });
 
 app.listen(3000, () => {

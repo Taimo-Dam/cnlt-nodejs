@@ -10,7 +10,7 @@
     :root {
       --black: #111; --white: #fff;
       --gray-light: #f4f3ef; --gray-mid: #e0deda;
-      --gray-text: #888; --accent: #c0392b;
+      --gray-text: #888; --accent: #c0392b; --amber: #d97706;
     }
     body { font-family: 'DM Sans', sans-serif; background: var(--gray-light); color: var(--black); min-height: 100vh; }
 
@@ -36,6 +36,21 @@
     .empty p { font-size: 14px; margin-bottom: 16px; }
     .empty a { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--black); text-decoration: none; border-bottom: 2px solid var(--black); padding-bottom: 2px; }
 
+    /* CARD ACTIONS (sửa/xóa) */
+    .card-actions { display: flex; align-items: center; gap: 14px; }
+    .action-edit {
+      font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--amber); text-decoration: none;
+      border-bottom: 1px solid var(--amber); padding-bottom: 1px;
+    }
+    .action-delete {
+      font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--accent); background: none; border: none; cursor: pointer;
+      border-bottom: 1px solid var(--accent); padding-bottom: 1px; padding: 0;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .action-delete:hover { opacity: 0.7; }
+
     /* FEATURED */
     .featured { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--gray-mid); background: var(--white); margin-bottom: 2px; }
     .featured-img { background: var(--gray-mid); min-height: 280px; display: flex; align-items: center; justify-content: center; font-size: 52px; opacity: 0.25; }
@@ -44,7 +59,8 @@
     .featured-title { font-family: 'Playfair Display', serif; font-size: 24px; line-height: 1.35; margin-bottom: 14px; }
     .featured-body { font-size: 14px; color: #555; line-height: 1.75; flex: 1; }
     .card-meta { font-size: 11px; color: var(--gray-text); margin-top: 20px; }
-    .read-more { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--black); text-decoration: none; margin-top: 10px; transition: gap 0.2s; }
+    .featured-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; }
+    .read-more { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--black); text-decoration: none; transition: gap 0.2s; }
     .read-more:hover { gap: 12px; }
 
     /* GRID */
@@ -52,12 +68,13 @@
     .post-card { background: var(--white); padding: 24px; display: flex; flex-direction: column; }
     .post-card-title { font-size: 15px; font-weight: 600; line-height: 1.4; margin-bottom: 10px; }
     .post-card-body { font-size: 13px; color: #666; line-height: 1.7; flex: 1; }
-    .post-card-link { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--black); text-decoration: none; margin-top: 16px; display: inline-block; border-bottom: 1px solid var(--gray-mid); padding-bottom: 2px; transition: border-color 0.2s; }
+    .post-card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; }
+    .post-card-link { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--black); text-decoration: none; border-bottom: 1px solid var(--gray-mid); padding-bottom: 2px; transition: border-color 0.2s; }
     .post-card-link:hover { border-color: var(--black); }
 
     /* LIST */
     .post-list-link { display: block; text-decoration: none; color: inherit; }
-    .post-list-item { background: var(--white); border: 1px solid var(--gray-mid); border-top: none; padding: 18px 28px; display: grid; grid-template-columns: 36px 1fr auto; gap: 20px; align-items: center; transition: background 0.15s; }
+    .post-list-item { background: var(--white); border: 1px solid var(--gray-mid); border-top: none; padding: 16px 28px; display: grid; grid-template-columns: 36px 1fr auto auto; gap: 16px; align-items: center; transition: background 0.15s; }
     .post-list-link:first-child .post-list-item { border-top: 1px solid var(--gray-mid); }
     .post-list-link:hover .post-list-item { background: var(--gray-light); }
     .post-num { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--gray-mid); }
@@ -117,7 +134,16 @@
             <% if (posts[0].createdAt) { %>
               <div class="card-meta"><%= posts[0].createdAt.toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' }) %></div>
             <% } %>
-            <a href="/blogposts/<%= posts[0]._id %>" class="read-more">Đọc tiếp →</a>
+            <div class="featured-footer">
+              <a href="/blogposts/<%= posts[0]._id %>" class="read-more">Đọc tiếp →</a>
+              <div class="card-actions">
+                <a href="/blogposts/<%= posts[0]._id %>/edit" class="action-edit">Sửa</a>
+                <form action="/blogposts/<%= posts[0]._id %>/delete" method="POST"
+                      onsubmit="return confirm('Xóa bài viết này?')">
+                  <button type="submit" class="action-delete">Xóa</button>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -129,7 +155,16 @@
               <span class="tag">Bài viết</span>
               <div class="post-card-title"><%= post.title %></div>
               <div class="post-card-body"><%= post.body.substring(0, 100) %><%= post.body.length > 100 ? '...' : '' %></div>
-              <a href="/blogposts/<%= post._id %>" class="post-card-link">Xem chi tiết →</a>
+              <div class="post-card-footer">
+                <a href="/blogposts/<%= post._id %>" class="post-card-link">Xem chi tiết →</a>
+                <div class="card-actions">
+                  <a href="/blogposts/<%= post._id %>/edit" class="action-edit">Sửa</a>
+                  <form action="/blogposts/<%= post._id %>/delete" method="POST"
+                        onsubmit="return confirm('Xóa bài viết này?')">
+                    <button type="submit" class="action-delete">Xóa</button>
+                  </form>
+                </div>
+              </div>
             </div>
           <% }) %>
         </div>
@@ -141,15 +176,22 @@
           <span class="section-count"><%= posts.length - 4 %> bài khác</span>
         </div>
         <% posts.slice(4).forEach((post, i) => { %>
-          <a href="/blogposts/<%= post._id %>" class="post-list-link">
-            <div class="post-list-item">
-              <span class="post-num">0<%= i + 5 %></span>
+          <div class="post-list-item" style="border-top: <%= i === 0 ? '1px solid var(--gray-mid)' : 'none' %>;">
+            <span class="post-num">0<%= i + 5 %></span>
+            <a href="/blogposts/<%= post._id %>" style="text-decoration:none;color:inherit;">
               <span class="post-list-title"><%= post.title %></span>
-              <% if (post.createdAt) { %>
-                <span class="post-list-date"><%= post.createdAt.toLocaleDateString('vi-VN') %></span>
-              <% } %>
+            </a>
+            <% if (post.createdAt) { %>
+              <span class="post-list-date"><%= post.createdAt.toLocaleDateString('vi-VN') %></span>
+            <% } %>
+            <div class="card-actions">
+              <a href="/blogposts/<%= post._id %>/edit" class="action-edit">Sửa</a>
+              <form action="/blogposts/<%= post._id %>/delete" method="POST"
+                    onsubmit="return confirm('Xóa bài viết này?')">
+                <button type="submit" class="action-delete">Xóa</button>
+              </form>
             </div>
-          </a>
+          </div>
         <% }) %>
       <% } %>
     <% } %>
