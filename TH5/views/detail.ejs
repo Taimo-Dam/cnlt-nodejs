@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= post.title %> — The Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/components.css">
+</head>
+<body>
+  <header>
+    <div class="header-top">
+      <a href="/" class="logo">The Blog</a>
+      
+      <form class="search-box" id="search-form" method="GET" action="/search">
+        <input type="text" name="q" placeholder="Tìm kiếm bài viết...">
+      </form>
+
+      <nav>
+        <a href="/">Trang chủ</a>
+        <button id="theme-toggle" class="theme-toggle">🌙</button>
+        <a href="/blogposts/new" class="btn-new">+ Tạo bài viết</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrapper">
+    <div class="main-content">
+      <div class="content">
+        <article class="article-page">
+          <div class="article-header">
+            <% if (post.category) { %>
+              <a href="/category/<%= post.category._id %>" class="tag"><%= post.category.name %></a>
+            <% } %>
+            <h1 class="article-title"><%= post.title %></h1>
+            <div class="article-meta">
+              <span>📅 <%= post.createdAt.toLocaleDateString('vi-VN') %></span>
+              <span>Bởi <strong><%= post.author || 'Admin' %></strong></span>
+              <span>👁️ <%= post.views %> lượt xem</span>
+            </div>
+            <% if (post.tags && post.tags.length > 0) { %>
+              <div class="tag-list">
+                <% post.tags.forEach(tag => { %>
+                  <span class="tag-item"><%= tag %></span>
+                <% }) %>
+              </div>
+            <% } %>
+          </div>
+
+          <div class="article-body"><%= post.body %></div>
+
+          <div class="article-footer-actions">
+            <button class="action-like" data-post-id="<%= post._id %>">
+              <% if (post.likes && post.likes.length > 0) { %>❤️<% } else { %>🤍<% } %>
+            </button>
+            <span class="like-count"><%= post.likes ? post.likes.length : 0 %></span>
+
+            <a href="/blogposts/<%= post._id %>/edit" class="action-edit">✏️ Sửa</a>
+            <form action="/blogposts/<%= post._id %>/delete" method="POST" style="display: inline;"
+                  onsubmit="return confirm('Xóa bài viết này?')">
+              <button type="submit" class="action-delete">🗑️ Xóa</button>
+            </form>
+          </div>
+        </article>
+
+        <!-- Related Posts -->
+        <% if (relatedPosts && relatedPosts.length > 0) { %>
+          <section class="related-posts">
+            <h3>📚 Bài viết liên quan</h3>
+            <div class="post-grid">
+              <% relatedPosts.slice(0, 3).forEach(rp => { %>
+                <div class="post-card">
+                  <% if (rp.category) { %>
+                    <a href="/category/<%= rp.category._id %>" class="post-list-category"><%= rp.category.name %></a>
+                  <% } %>
+                  <div class="post-card-title"><%= rp.title %></div>
+                  <div class="post-card-body"><%= rp.excerpt %></div>
+                  <div class="post-card-footer">
+                    <a href="/blogposts/<%= rp._id %>" class="post-card-link">Xem →</a>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          </section>
+        <% } %>
+
+        <!-- Comments Section -->
+        <section class="comments-section">
+          <h3>💬 Bình luận (<%= post.comments ? post.comments.length : 0 %>)</h3>
+
+          <!-- Comment Form -->
+          <form id="comment-form" class="comment-form" action="/blogposts/<%= post._id %>/comments" method="POST">
+            <div class="form-group">
+              <input type="text" name="author" placeholder="Tên của bạn" required>
+            </div>
+            <div class="form-group">
+              <input type="email" name="email" placeholder="Email của bạn" required>
+            </div>
+            <div class="form-group">
+              <textarea name="content" placeholder="Bình luận của bạn..." rows="4" required maxlength="1000"></textarea>
+              <div style="font-size: 11px; color: #999; margin-top: 6px;">Tối đa 1000 ký tự</div>
+            </div>
+            <button type="submit" class="button button-primary">Gửi bình luận</button>
+          </form>
+
+          <!-- Comments List -->
+          <div class="comments-list">
+            <% if (post.comments && post.comments.length > 0) { %>
+              <% post.comments.forEach(comment => { %>
+                <div class="comment-item">
+                  <div class="comment-header">
+                    <strong><%= comment.author %></strong>
+                    <span class="comment-date">
+                      📅 <%= new Date(comment.createdAt).toLocaleDateString('vi-VN') %>
+                    </span>
+                  </div>
+                  <div class="comment-body"><%= comment.content %></div>
+                  <% if (comment.approved === false) { %>
+                    <div style="font-size: 11px; color: #c0392b; margin-top: 8px;">⏳ Chờ xét duyệt</div>
+                  <% } %>
+                  <form action="/comments/<%= comment._id %>/delete" method="POST" style="display: inline; margin-top: 8px;"
+                        onsubmit="return confirm('Xóa bình luận này?')">
+                    <button type="submit" style="
+                      font-size: 11px; background: none; border: none;
+                      color: #c0392b; text-decoration: underline;
+                      cursor: pointer; padding: 0;">
+                      Xóa
+                    </button>
+                  </form>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <p style="text-align: center; color: #999; padding: 20px;">
+                Chưa có bình luận nào. Hãy là người đầu tiên!
+              </p>
+            <% } %>
+          </div>
+        </section>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">ℹ️ Thông tin bài viết</h3>
+          <div class="sidebar-item">
+            <span>Ngày đăng: <strong><%= post.createdAt.toLocaleDateString('vi-VN') %></strong></span>
+          </div>
+          <div class="sidebar-item">
+            <span>Tác giả: <strong><%= post.author || 'Admin' %></strong></span>
+          </div>
+          <div class="sidebar-item">
+            <span>Lượt xem: <strong><%= post.views %></strong></span>
+          </div>
+          <div class="sidebar-item">
+            <span>Lượt thích: <strong><%= post.likes ? post.likes.length : 0 %></strong></span>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">📂 Danh mục</h3>
+          <% if (categories && categories.length > 0) { %>
+            <% categories.forEach(cat => { %>
+              <div class="sidebar-item">
+                <a href="/category/<%= cat._id %>"><%= cat.name %></a>
+                <span class="sidebar-badge"><%= cat.postCount %></span>
+              </div>
+            <% }) %>
+          <% } %>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">⌨️ Phím tắt</h3>
+          <div class="sidebar-item" style="font-size: 12px;">
+            <div>Ctrl+K → Tìm kiếm</div>
+            <div>Ctrl+D → Chế độ tối</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <span>The Blog &copy; <%= new Date().getFullYear() %></span>
+    <span>Node.js + MongoDB + EJS</span>
+  </footer>
+
+  <script src="/js/script.js"></script>
+</body>
+</html>
