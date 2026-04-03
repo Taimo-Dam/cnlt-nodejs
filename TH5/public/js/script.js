@@ -1,5 +1,3 @@
-// ========== MAIN SCRIPT ==========
-
 document.addEventListener('DOMContentLoaded', function () {
   // Initialize theme
   initTheme();
@@ -11,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function () {
   showNotification();
 });
 
-// ========== THEME MANAGER ==========
 
 function initTheme() {
   const themeToggle = document.getElementById('theme-toggle');
@@ -161,7 +158,6 @@ function showNotification(message = '', type = 'success') {
   }, 5000);
 }
 
-// ========== UTILITY FUNCTIONS ==========
 
 function escapeHtml(text) {
   const div = document.createElement('div');
@@ -183,7 +179,6 @@ function hideLoading() {
   if (overlay) overlay.remove();
 }
 
-// ========== FORM VALIDATION ==========
 
 function validateCommentForm(form) {
   const content = form.querySelector('textarea[name="content"]');
@@ -216,7 +211,6 @@ function isValidEmail(email) {
   return emailRegex.test(email);
 }
 
-// ========== KEYBOARD SHORTCUTS ==========
 
 document.addEventListener('keydown', function (e) {
   // Ctrl/Cmd + K to focus search
@@ -233,7 +227,6 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-// ========== SMOOTH SCROLL ==========
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function (e) {
@@ -245,7 +238,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-// ========== LAZY LOAD IMAGES ==========
 
 if ('IntersectionObserver' in window) {
   const imageObserver = new IntersectionObserver((entries, observer) => {
@@ -264,7 +256,6 @@ if ('IntersectionObserver' in window) {
   });
 }
 
-// ========== CONSOLE MESSAGE ==========
 
 console.log('%cThe Blog', 'font-size: 24px; font-weight: bold; color: #c0392b;');
 console.log('%cA modern, responsive blog platform built with Node.js, MongoDB, and EJS', 'font-size: 14px; color: #888;');
