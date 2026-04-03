@@ -84,7 +84,6 @@ function handleSearch(e) {
   }
 }
 
-// ========== LIKE HANDLER ==========
 
 async function handleLike(e) {
   e.preventDefault();
@@ -126,7 +125,6 @@ async function handleLike(e) {
   }
 }
 
-// ========== NOTIFICATIONS ==========
 
 function showNotification(message = '', type = 'success') {
   // Check if message comes from URL parameter
