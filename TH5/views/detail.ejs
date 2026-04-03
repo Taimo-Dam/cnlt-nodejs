@@ -64,7 +64,6 @@
           </div>
         </article>
 
-        <!-- Related Posts -->
         <% if (relatedPosts && relatedPosts.length > 0) { %>
           <section class="related-posts">
             <h3>📚 Bài viết liên quan</h3>
@@ -85,7 +84,6 @@
           </section>
         <% } %>
 
-        <!-- Comments Section -->
         <section class="comments-section">
           <h3>💬 Bình luận (<%= post.comments ? post.comments.length : 0 %>)</h3>
 
@@ -104,7 +102,6 @@
             <button type="submit" class="button button-primary">Gửi bình luận</button>
           </form>
 
-          <!-- Comments List -->
           <div class="comments-list">
             <% if (post.comments && post.comments.length > 0) { %>
               <% post.comments.forEach(comment => { %>
