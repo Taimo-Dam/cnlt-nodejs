@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= category.name %> — The Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/components.css">
+</head>
+<body>
+  <header>
+    <div class="header-top">
+      <a href="/" class="logo">The Blog</a>
+      
+      <form class="search-box" id="search-form" method="GET" action="/search">
+        <input type="text" name="q" placeholder="Tìm kiếm bài viết...">
+      </form>
+
+      <nav>
+        <a href="/">Trang chủ</a>
+        <button id="theme-toggle" class="theme-toggle">🌙</button>
+        <a href="/blogposts/new" class="btn-new">+ Tạo bài viết</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrapper">
+    <div class="main-content">
+      <div class="content">
+        <div class="container">
+          <div style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #c0392b;">
+            <span class="tag" style="border-top-color: <%= category.color %>; color: <%= category.color %>;">Danh mục</span>
+            <h1 class="article-title" style="border: none; margin: 10px 0 0 0; color: <%= category.color %>;">
+              <%= category.name %>
+            </h1>
+            <% if (category.description) { %>
+              <p style="color: #666; margin-top: 10px;"><%= category.description %></p>
+            <% } %>
+            <p style="font-size: 12px; color: #999; margin-top: 10px;">Tổng cộng <%= totalPosts %> bài viết</p>
+          </div>
+
+          <% if (posts.length === 0) { %>
+            <div class="empty">
+              <p>😶 Danh mục này chưa có bài viết</p>
+              <a href="/blogposts/new">Tạo bài viết mới →</a>
+            </div>
+          <% } else { %>
+            <div class="post-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+              <% posts.forEach(post => { %>
+                <div class="post-card">
+                  <% if (post.tags && post.tags.length > 0) { %>
+                    <div class="tag-list" style="margin-bottom: 10px;">
+                      <% post.tags.slice(0, 3).forEach(tag => { %>
+                        <span class="tag-item"><%= tag %></span>
+                      <% }) %>
+                    </div>
+                  <% } %>
+                  <div class="post-card-title"><%= post.title %></div>
+                  <div class="post-card-body"><%= post.excerpt %></div>
+                  <div style="font-size: 12px; color: #999; margin-bottom: 10px;">
+                    📅 <%= post.createdAt.toLocaleDateString('vi-VN') %> • 👁️ <%= post.views %>
+                  </div>
+                  <div class="post-card-footer">
+                    <a href="/blogposts/<%= post._id %>" class="post-card-link">Xem →</a>
+                    <button class="action-like" data-post-id="<%= post._id %>">🤍</button>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+
+            <!-- Pagination -->
+            <% if (totalPages > 1) { %>
+              <div class="pagination">
+                <% if (currentPage > 1) { %>
+                  <a href="/category/<%= category._id %>?page=<%= currentPage - 1 %>" class="pagination-item">← Trước</a>
+                <% } %>
+
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                  <% if (i === currentPage) { %>
+                    <span class="pagination-item active"><%= i %></span>
+                  <% } else { %>
+                    <a href="/category/<%= category._id %>?page=<%= i %>" class="pagination-item"><%= i %></a>
+                  <% } %>
+                <% } %>
+
+                <% if (currentPage < totalPages) { %>
+                  <a href="/category/<%= category._id %>?page=<%= currentPage + 1 %>" class="pagination-item">Sau →</a>
+                <% } %>
+              </div>
+            <% } %>
+          <% } %>
+        </div>
+      </div>
+
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">📂 Danh mục khác</h3>
+          <% if (categories && categories.length > 0) { %>
+            <% categories.forEach(cat => { %>
+              <div class="sidebar-item">
+                <a href="/category/<%= cat._id %>" style="<%= cat._id.toString() === category._id.toString() ? 'color: #c0392b; font-weight: bold;' : '' %>">
+                  <%= cat.name %>
+                </a>
+                <span class="sidebar-badge"><%= cat.postCount %></span>
+              </div>
+            <% }) %>
+          <% } %>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">📊 Thống kê</h3>
+          <div class="sidebar-item">
+            <span>Bài viết: <strong><%= totalPosts %></strong></span>
+          </div>
+          <div class="sidebar-item">
+            <span>Trang: <strong><%= currentPage %></strong> / <strong><%= totalPages %></strong></span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <span>The Blog &copy; <%= new Date().getFullYear() %></span>
+    <span>Node.js + MongoDB + EJS</span>
+  </footer>
+
+  <script src="/js/script.js"></script>
+</body>
+</html>
