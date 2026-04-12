@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sửa bài viết — The Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/components.css">
+</head>
+<body>
+  <header>
+    <div class="header-top">
+      <a href="/" class="logo">The Blog</a>
+      
+      <form class="search-box" id="search-form" method="GET" action="/search">
+        <input type="text" name="q" placeholder="Tìm kiếm bài viết...">
+      </form>
+
+      <nav>
+        <a href="/">Trang chủ</a>
+        <button id="theme-toggle" class="theme-toggle">🌙</button>
+        <a href="/blogposts/new" class="btn-new">+ Tạo bài viết</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrapper">
+    <div class="main-content">
+      <div class="content">
+        <div class="container">
+          <div style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #d97706;">
+            <span class="tag" style="border-top-color: #d97706; color: #d97706;">Chỉnh sửa</span>
+            <h1 class="article-title" style="border: none; margin: 10px 0 0 0;">Sửa bài viết</h1>
+          </div>
+
+          <form action="/blogposts/<%= post._id %>/update" method="POST" class="form-wrap">
+            <div class="form-group">
+              <label for="title">Tiêu đề bài viết</label>
+              <input type="text" id="title" name="title" value="<%= post.title %>" required>
+            </div>
+
+            <div class="form-group">
+              <label for="category">Danh mục</label>
+              <select id="category" name="category" style="
+                width: 100%; border: none; border-bottom: 1.5px solid #e0deda;
+                background: transparent; padding: 10px 0; font-size: 15px;
+                font-family: 'DM Sans', sans-serif; color: #111;
+                outline: none; transition: border-color 0.2s;
+              ">
+                <option value="">-- Chọn danh mục --</option>
+                <% if (categories && categories.length > 0) { %>
+                  <% categories.forEach(cat => { %>
+                    <option value="<%= cat._id %>" <% if (post.category && post.category._id.toString() === cat._id.toString()) { %>selected<% } %>>
+                      <%= cat.name %>
+                    </option>
+                  <% }) %>
+                <% } %>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="tags">Thẻ (Tags)</label>
+              <input type="text" id="tags" name="tags" placeholder="javascript, nodejs, express" value="<%= post.tags && post.tags.length > 0 ? post.tags.join(', ') : '' %>">
+              <div style="font-size: 11px; color: #999; margin-top: 6px;">Nhập các thẻ cách nhau bằng dấu phẩy</div>
+            </div>
+
+            <div class="form-group">
+              <label for="body">Nội dung</label>
+              <textarea id="body" name="body" required><%= post.body %></textarea>
+            </div>
+
+            <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 28px;">
+              <input type="checkbox" id="featured" name="featured" <% if (post.featured) { %>checked<% } %>>
+              <label for="featured" style="margin: 0; text-transform: none;">Hiển thị trên trang chủ (bài viết nổi bật)</label>
+            </div>
+
+            <div class="form-footer">
+              <a href="/blogposts/<%= post._id %>" style="font-size: 11px; color: #888; text-decoration: none;">← Hủy</a>
+              <button type="submit" class="button button-primary">Lưu thay đổi</button>
+            </div>
+          </form>
+
+          <!-- Delete Zone -->
+          <div style="
+            margin-top: 24px;
+            padding: 20px 24px;
+            border: 1px dashed #fca5a5;
+            background: #fff5f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          ">
+            <p style="font-size: 12px; color: #991b1b;">Xóa bài viết này sẽ không thể khôi phục lại.</p>
+            <form action="/blogposts/<%= post._id %>/delete" method="POST"
+                  onsubmit="return confirm('Bạn chắc chắn muốn xóa bài viết này không?')">
+              <button type="submit" style="
+                background: none;
+                border: 1.5px solid #c0392b;
+                color: #c0392b;
+                padding: 8px 20px;
+                font-family: 'DM Sans', sans-serif;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                cursor: pointer;
+                transition: all 0.2s;
+              " onmouseover="this.style.background='#c0392b'; this.style.color='#fff';" 
+                 onmouseout="this.style.background='none'; this.style.color='#c0392b';">
+                Xóa bài viết
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">💡 Gợi ý</h3>
+          <div class="sidebar-item" style="font-size: 12px; line-height: 1.6;">
+            <p>📝 Viết tiêu đề ngắn gọn</p>
+            <p>📂 Chọn danh mục phù hợp</p>
+            <p>#️⃣ Thêm thẻ để dễ tìm</p>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">⌨️ Phím tắt</h3>
+          <div class="sidebar-item" style="font-size: 12px;">
+            <div>Ctrl+K → Tìm kiếm</div>
+            <div>Ctrl+D → Chế độ tối</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <span>The Blog &copy; <%= new Date().getFullYear() %></span>
+    <span>Node.js + MongoDB + EJS</span>
+  </footer>
+
+  <script src="/js/script.js"></script>
+</body>
+</html>
