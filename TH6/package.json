@@ -1,21 +1,13 @@
 {
-  "name": "th6",
+  "name": "nodejs-blog-th6",
   "version": "1.0.0",
-  "main": "app.js",
+  "description": "Node.js blog demo with raw HTTP server, events, and streams.",
+  "main": "server.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "dotenv": "^16.4.1",
-    "ejs": "^5.0.1",
-    "express": "^5.2.1",
-    "mongodb": "^7.1.1",
-    "mongoose": "^9.3.3",
-    "mongosh": "^2.8.2"
+  "engines": {
+    "node": ">=18.0.0"
   },
-  "description": "Blog Project - Refactored with MVC and Modules Structure"
+  "license": "MIT"
 }

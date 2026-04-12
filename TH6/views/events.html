@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Events - NodeJS Blog TH6</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&family=JetBrains+Mono:wght@400;600&display=swap');
+    :root { --ink:#1a1a2e; --paper:#faf8f3; --accent:#c0392b; --green:#27ae60; --muted:#8a8a8a; --border:#e0dbd0; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--paper); color:var(--ink); font-family:'Source Sans 3',sans-serif; }
+    header { border-bottom:3px double var(--ink); padding:20px 48px; display:flex; align-items:center; justify-content:space-between; }
+    .logo { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:900; }
+    .logo span { color:var(--accent); }
+    nav a { margin-left:24px; text-decoration:none; color:var(--ink); font-size:0.8rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
+    nav a:hover { color:var(--accent); }
+    .page-header { padding:48px 48px 32px; border-bottom:1px solid var(--border); }
+    .page-header h1 { font-family:'Playfair Display',serif; font-size:3rem; font-weight:900; }
+    .page-header p { color:var(--muted); margin-top:8px; font-size:1rem; }
+    .content { padding:48px; display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+    .card { border:1px solid var(--border); padding:32px; }
+    .card h2 { font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+    .badge { display:inline-block; padding:2px 10px; font-size:0.75rem; font-family:'JetBrains Mono',monospace; font-weight:600; margin-bottom:16px; }
+    .badge.on { background:#e8f5e9; color:var(--green); border:1px solid var(--green); }
+    .badge.emit { background:#fff3e0; color:#e65100; border:1px solid #e65100; }
+    .badge.once { background:#e3f2fd; color:#1565c0; border:1px solid #1565c0; }
+    .code { background:#1a1a2e; color:#a8d8ea; padding:20px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; line-height:1.6; margin:16px 0; overflow-x:auto; }
+    .code .kw { color:#c792ea; }
+    .code .str { color:#c3e88d; }
+    .code .fn { color:#82aaff; }
+    .code .cm { color:#546e7a; }
+    .btn { display:inline-block; padding:10px 24px; background:var(--ink); color:var(--paper); text-decoration:none; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border:none; margin-top:8px; margin-right:8px; transition:background 0.2s; }
+    .btn:hover { background:var(--accent); }
+    .btn.green { background:var(--green); }
+    .log-box { background:#1a1a2e; color:#a8d8ea; padding:20px; font-family:'JetBrains Mono',monospace; font-size:0.78rem; line-height:1.8; min-height:120px; max-height:240px; overflow-y:auto; margin-top:16px; }
+    .log-box .log-entry { color:#c3e88d; }
+    .log-box .log-entry.once { color:#82aaff; }
+    .counter { font-family:'Playfair Display',serif; font-size:3rem; color:var(--accent); font-weight:900; text-align:center; padding:20px; }
+    .counter-label { text-align:center; font-size:0.8rem; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+    .full-width { grid-column:1/-1; }
+    input[type=text] { width:100%; padding:10px 14px; border:1px solid var(--border); background:var(--paper); font-family:'Source Sans 3',sans-serif; font-size:0.95rem; margin-bottom:8px; outline:none; }
+    input[type=text]:focus { border-color:var(--ink); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Node<span>JS</span> Blog</div>
+    <nav>
+      <a href="/">Trang chủ</a>
+      <a href="/events">Events</a>
+      <a href="/request">Request</a>
+      <a href="/streams">Streams</a>
+    </nav>
+  </header>
+
+  <div class="page-header">
+    <h1>⚡ EventEmitter</h1>
+    <p>Minh họa on(), emit(), once() — truyền dữ liệu và callback trong event</p>
+  </div>
+
+  <div class="content">
+    <!-- on() demo -->
+    <div class="card">
+      <span class="badge on">emitter.on()</span>
+      <h2>pageVisit Event</h2>
+      <p style="color:var(--muted);font-size:0.9rem;margin-bottom:12px">Lắng nghe nhiều lần. Mỗi lần trigger sẽ tăng bộ đếm.</p>
+      <div class="code">
+<span class="cm">// Lắng nghe event 'pageVisit'</span>
+emitter.<span class="fn">on</span>(<span class="str">'pageVisit'</span>, (data) => {
+  visitCount++;
+  <span class="fn">logEvent</span>(`Visit: ${data.page}`);
+});
+      </div>
+      <div class="counter" id="visitCounter">__VISIT_COUNT__</div>
+      <div class="counter-label">Lượt trigger pageVisit</div>
+      <br>
+      <button class="btn" onclick="triggerEvent('pageVisit')">emit('pageVisit')</button>
+    </div>
+
+    <!-- emit() + callback -->
+    <div class="card">
+      <span class="badge emit">emitter.emit() + data</span>
+      <h2>postCreated Event</h2>
+      <p style="color:var(--muted);font-size:0.9rem;margin-bottom:12px">Truyền dữ liệu vào event (title, author) và xử lý trong callback.</p>
+      <div class="code">
+<span class="cm">// emit với dữ liệu</span>
+emitter.<span class="fn">emit</span>(<span class="str">'postCreated'</span>, {
+  title: <span class="str">'Bài viết mới'</span>,
+  author: <span class="str">'Admin'</span>
+});
+      </div>
+      <input type="text" id="postTitle" placeholder="Tiêu đề bài viết...">
+      <input type="text" id="postAuthor" placeholder="Tên tác giả...">
+      <button class="btn green" onclick="triggerPostCreated()">emit('postCreated')</button>
+    </div>
+
+    <!-- once() demo -->
+    <div class="card">
+      <span class="badge once">emitter.once()</span>
+      <h2>serverStart Event</h2>
+      <p style="color:var(--muted);font-size:0.9rem;margin-bottom:12px">Chỉ chạy 1 lần duy nhất khi server khởi động.</p>
+      <div class="code">
+<span class="cm">// Chỉ chạy 1 lần!</span>
+emitter.<span class="fn">once</span>(<span class="str">'serverStart'</span>, (data) => {
+  <span class="fn">log</span>(`Server at port ${data.port}`);
+});
+      </div>
+      <div id="onceStatus" style="background:#e8f5e9;border:1px solid var(--green);padding:12px;font-size:0.85rem;color:var(--green);margin-top:12px">
+        ✅ once('serverStart') đã chạy 1 lần khi server khởi động
+      </div>
+    </div>
+
+    <!-- Log box -->
+    <div class="card">
+      <h2>📋 Event Log</h2>
+      <p style="color:var(--muted);font-size:0.9rem;margin-bottom:12px">Log thời gian thực từ tất cả events đã trigger.</p>
+      <div class="log-box" id="logBox">
+        __LOG_ENTRIES__
+      </div>
+      <button class="btn" style="margin-top:12px" onclick="refreshLog()">🔄 Refresh Log</button>
+      <a href="/download-log" class="btn" style="background:#555">⬇ Download Log</a>
+    </div>
+  </div>
+
+  <script>
+    async function triggerEvent(type) {
+      const res = await fetch('/event?type=' + type);
+      const data = await res.json();
+      document.getElementById('visitCounter').textContent = data.visitCount;
+      refreshLog();
+    }
+
+    async function triggerPostCreated() {
+      const title = document.getElementById('postTitle').value || 'Bài viết không tên';
+      const author = document.getElementById('postAuthor').value || 'Ẩn danh';
+      await fetch(`/event?type=postCreated&title=${encodeURIComponent(title)}&author=${encodeURIComponent(author)}`);
+      refreshLog();
+    }
+
+    async function refreshLog() {
+      const res = await fetch('/event?type=log');
+      const data = await res.json();
+      const box = document.getElementById('logBox');
+      box.innerHTML = data.log.map(l => `<div class="log-entry">${l}</div>`).join('') || '<span style="color:var(--muted)">Chưa có log...</span>';
+      box.scrollTop = box.scrollHeight;
+      if (data.visitCount !== undefined) {
+        document.getElementById('visitCounter').textContent = data.visitCount;
+      }
+    }
+
+    refreshLog();
+  </script>
+</body>
+</html>

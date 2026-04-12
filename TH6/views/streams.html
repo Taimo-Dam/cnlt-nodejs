@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Streams - NodeJS Blog TH6</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&family=JetBrains+Mono:wght@400;600&display=swap');
+    :root { --ink:#1a1a2e; --paper:#faf8f3; --accent:#c0392b; --muted:#8a8a8a; --border:#e0dbd0; --blue:#1565c0; --green:#27ae60; --orange:#e65100; --purple:#6a1b9a; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--paper); color:var(--ink); font-family:'Source Sans 3',sans-serif; }
+    header { border-bottom:3px double var(--ink); padding:20px 48px; display:flex; align-items:center; justify-content:space-between; }
+    .logo { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:900; }
+    .logo span { color:var(--accent); }
+    nav a { margin-left:24px; text-decoration:none; color:var(--ink); font-size:0.8rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
+    nav a:hover { color:var(--accent); }
+    .page-header { padding:48px 48px 32px; border-bottom:1px solid var(--border); }
+    .page-header h1 { font-family:'Playfair Display',serif; font-size:3rem; font-weight:900; }
+    .page-header p { color:var(--muted); margin-top:8px; }
+    .content { padding:48px; display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+    .card { border:1px solid var(--border); padding:32px; }
+    .card h2 { font-family:'Playfair Display',serif; font-size:1.3rem; margin-bottom:8px; }
+    .stream-badge { display:inline-block; padding:3px 12px; font-size:0.75rem; font-family:'JetBrains Mono',monospace; font-weight:700; margin-bottom:16px; }
+    .readable { background:#e3f2fd; color:var(--blue); border:1px solid var(--blue); }
+    .writable { background:#e8f5e9; color:var(--green); border:1px solid var(--green); }
+    .transform { background:#fff3e0; color:var(--orange); border:1px solid var(--orange); }
+    .duplex { background:#f3e5f5; color:var(--purple); border:1px solid var(--purple); }
+    .code { background:#1a1a2e; color:#a8d8ea; padding:16px; font-family:'JetBrains Mono',monospace; font-size:0.78rem; line-height:1.6; margin:12px 0; overflow-x:auto; }
+    .code .kw { color:#c792ea; }
+    .code .str { color:#c3e88d; }
+    .code .fn { color:#82aaff; }
+    .output-box { background:#1a1a2e; color:#c3e88d; padding:16px; font-family:'JetBrains Mono',monospace; font-size:0.8rem; line-height:1.6; min-height:80px; max-height:160px; overflow-y:auto; margin-top:12px; white-space:pre-wrap; }
+    .btn { display:inline-block; padding:8px 20px; background:var(--ink); color:var(--paper); font-size:0.78rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border:none; margin-top:8px; margin-right:6px; text-decoration:none; transition:background 0.2s; }
+    .btn:hover { background:var(--accent); }
+    .btn.blue { background:var(--blue); }
+    .btn.green { background:var(--green); }
+    .btn.orange { background:var(--orange); }
+    .btn.purple { background:var(--purple); }
+    textarea, input[type=text] { width:100%; padding:10px 14px; border:1px solid var(--border); background:var(--paper); font-family:'Source Sans 3',sans-serif; font-size:0.9rem; margin-bottom:8px; outline:none; resize:vertical; }
+    textarea:focus, input[type=text]:focus { border-color:var(--ink); }
+    select { padding:8px 14px; border:1px solid var(--border); background:var(--paper); font-size:0.9rem; outline:none; margin-bottom:8px; cursor:pointer; }
+    .file-content { background:#f5f0e8; border:1px solid var(--border); padding:16px; font-size:0.85rem; line-height:1.7; max-height:160px; overflow-y:auto; margin-top:12px; white-space:pre-wrap; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Node<span>JS</span> Blog</div>
+    <nav>
+      <a href="/">Trang chủ</a>
+      <a href="/events">Events</a>
+      <a href="/request">Request</a>
+      <a href="/streams">Streams</a>
+    </nav>
+  </header>
+
+  <div class="page-header">
+    <h1>🌊 Stream Demo</h1>
+    <p>Minh họa đầy đủ 4 loại stream: Readable, Writable, Transform, Duplex</p>
+  </div>
+
+  <div class="content">
+
+    <!-- 4.1 Readable -->
+    <div class="card">
+      <span class="stream-badge readable">Readable Stream</span>
+      <h2>4.1 Đọc file bằng createReadStream()</h2>
+      <div class="code">
+<span class="kw">const</span> stream = fs.<span class="fn">createReadStream</span>(<span class="str">'data/story.txt'</span>);
+stream.<span class="fn">on</span>(<span class="str">'data'</span>, chunk => res.<span class="fn">write</span>(chunk));
+stream.<span class="fn">on</span>(<span class="str">'end'</span>, () => res.<span class="fn">end</span>());
+      </div>
+      <p style="color:var(--muted);font-size:0.85rem">Nội dung file <code>data/story.txt</code> được stream về client:</p>
+      <div class="file-content" id="readableOutput">Nhấn nút để đọc file...</div>
+      <button class="btn blue" onclick="readFile()">▶ Đọc file (Readable)</button>
+    </div>
+
+    <!-- 4.2 Writable -->
+    <div class="card">
+      <span class="stream-badge writable">Writable Stream</span>
+      <h2>4.2 Ghi file bằng createWriteStream()</h2>
+      <div class="code">
+<span class="kw">const</span> ws = fs.<span class="fn">createWriteStream</span>(<span class="str">'data/log.txt'</span>, {flags:<span class="str">'a'</span>});
+ws.<span class="fn">write</span>(data + <span class="str">'\n'</span>);
+ws.<span class="fn">end</span>();
+      </div>
+      <textarea id="writableInput" rows="3" placeholder="Nhập nội dung muốn ghi vào file log..."></textarea>
+      <div id="writableStatus" class="output-box" style="min-height:60px">Chờ ghi dữ liệu...</div>
+      <button class="btn green" onclick="writeFile()">✏ Ghi vào file (Writable)</button>
+      <a href="/download-log" class="btn" style="background:#555">⬇ Tải log</a>
+    </div>
+
+    <!-- 4.3 Transform -->
+    <div class="card">
+      <span class="stream-badge transform">Transform Stream</span>
+      <h2>4.3 Biến đổi text (kế thừa Transform)</h2>
+      <div class="code">
+<span class="kw">class</span> <span class="fn">TextTransform</span> <span class="kw">extends</span> Transform {
+  <span class="fn">_transform</span>(chunk, enc, <span class="fn">callback</span>) {
+    <span class="kw">let</span> text = chunk.<span class="fn">toString</span>();
+    text = text.<span class="fn">toUpperCase</span>(); <span class="cm">// biến đổi</span>
+    <span class="kw">this</span>.<span class="fn">push</span>(text);
+    <span class="fn">callback</span>();
+  }
+}
+      </div>
+      <input type="text" id="transformInput" placeholder="Nhập text để biến đổi...">
+      <select id="transformMode">
+        <option value="uppercase">UPPERCASE</option>
+        <option value="replace">Replace keywords (nodejs, stream, blog)</option>
+      </select>
+      <div class="output-box" id="transformOutput">Kết quả sẽ hiện ở đây...</div>
+      <button class="btn orange" onclick="transformText()">⚡ Transform</button>
+    </div>
+
+    <!-- 4.4 Duplex -->
+    <div class="card">
+      <span class="stream-badge duplex">Duplex Stream</span>
+      <h2>4.4 Echo — nhận và trả dữ liệu (kế thừa Duplex)</h2>
+      <div class="code">
+<span class="kw">class</span> <span class="fn">EchoDuplex</span> <span class="kw">extends</span> Duplex {
+  <span class="fn">_write</span>(chunk, enc, <span class="fn">cb</span>) {
+    <span class="kw">this</span>.buffer.<span class="fn">push</span>(chunk.<span class="fn">toString</span>());
+    <span class="fn">cb</span>();
+  }
+  <span class="fn">_read</span>(size) {
+    <span class="kw">this</span>.<span class="fn">push</span>(<span class="str">`[ECHO] `</span> + <span class="kw">this</span>.buffer.<span class="fn">shift</span>());
+  }
+}
+      </div>
+      <input type="text" id="duplexInput" placeholder="Nhập tin nhắn để echo...">
+      <div class="output-box" id="duplexOutput">Echo response sẽ hiện ở đây...</div>
+      <button class="btn purple" onclick="echoMessage()">🔁 Echo (Duplex)</button>
+    </div>
+
+  </div>
+
+  <script>
+    async function readFile() {
+      const el = document.getElementById('readableOutput');
+      el.textContent = 'Đang đọc...';
+      const res = await fetch('/streams/readable');
+      const text = await res.text();
+      el.textContent = text;
+    }
+
+    async function writeFile() {
+      const data = document.getElementById('writableInput').value;
+      if (!data.trim()) return;
+      const res = await fetch('/streams/writable', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: data })
+      });
+      const result = await res.json();
+      document.getElementById('writableStatus').textContent = result.message || 'Ghi thành công!';
+    }
+
+    async function transformText() {
+      const text = document.getElementById('transformInput').value;
+      const mode = document.getElementById('transformMode').value;
+      if (!text.trim()) return;
+      const res = await fetch('/streams/transform', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, mode })
+      });
+      const result = await res.json();
+      document.getElementById('transformOutput').textContent = result.result;
+    }
+
+    async function echoMessage() {
+      const msg = document.getElementById('duplexInput').value;
+      if (!msg.trim()) return;
+      const res = await fetch('/streams/duplex', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg })
+      });
+      const result = await res.json();
+      document.getElementById('duplexOutput').textContent = result.echo;
+    }
+  </script>
+</body>
+</html>

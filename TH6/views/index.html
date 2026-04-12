@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NodeJS Blog - TH6</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:wght@300;400;600&display=swap');
+    :root {
+      --ink: #1a1a2e;
+      --paper: #faf8f3;
+      --accent: #c0392b;
+      --muted: #8a8a8a;
+      --border: #e0dbd0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--paper); color: var(--ink); font-family: 'Source Sans 3', sans-serif; min-height: 100vh; }
+
+    header {
+      border-bottom: 3px double var(--ink);
+      padding: 24px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--paper);
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; letter-spacing: -1px; }
+    .logo span { color: var(--accent); }
+
+    nav a {
+      margin-left: 28px; text-decoration: none; color: var(--ink);
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+      border-bottom: 2px solid transparent; padding-bottom: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    nav a:hover { border-bottom-color: var(--accent); color: var(--accent); }
+
+    .hero {
+      border-bottom: 1px solid var(--border);
+      padding: 80px 48px 60px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+    }
+    .hero-text h1 {
+      font-family: 'Playfair Display', serif; font-size: 4.5rem; line-height: 1.05;
+      font-weight: 900; margin-bottom: 24px;
+    }
+    .hero-text h1 em { font-style: italic; color: var(--accent); }
+    .hero-text p { font-size: 1.15rem; color: var(--muted); line-height: 1.7; margin-bottom: 32px; }
+    .btn {
+      display: inline-block; padding: 14px 36px;
+      background: var(--ink); color: var(--paper);
+      text-decoration: none; font-weight: 600; font-size: 0.85rem;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--accent); transform: translateY(-1px); }
+
+    .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .stat {
+      background: var(--paper); padding: 32px;
+      text-align: center;
+    }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 700; color: var(--accent); }
+    .stat-label { font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+
+    .features {
+      padding: 64px 48px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    }
+    .feature {
+      padding: 40px 32px;
+      border-right: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+    .feature:last-child { border-right: none; }
+    .feature:hover { background: #f5f0e8; }
+    .feature-icon { font-size: 2rem; margin-bottom: 16px; }
+    .feature h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 12px; }
+    .feature p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+    .feature a { color: var(--accent); text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-block; margin-top: 16px; }
+    .feature a:hover { text-decoration: underline; }
+
+    footer {
+      border-top: 3px double var(--ink);
+      padding: 24px 48px;
+      text-align: center; font-size: 0.8rem; color: var(--muted); letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Node<span>JS</span> Blog</div>
+    <nav>
+      <a href="/">Trang chủ</a>
+      <a href="/events">Events</a>
+      <a href="/request">Request</a>
+      <a href="/streams">Streams</a>
+      <a href="/json">JSON</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Khám phá<br><em>NodeJS</em><br>Chuyên sâu</h1>
+      <p>Ứng dụng Blog minh họa đầy đủ EventEmitter, HTTP Server, Stream và Request/Response Header trong NodeJS.</p>
+      <a href="/events" class="btn">Bắt đầu khám phá</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Loại Stream</div></div>
+      <div class="stat"><div class="stat-num">3+</div><div class="stat-label">Events</div></div>
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Trang chính</div></div>
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Endpoints</div></div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature">
+      <div class="feature-icon">⚡</div>
+      <h3>EventEmitter</h3>
+      <p>Minh họa on(), emit(), once() với dữ liệu thực tế và callback trong event handler.</p>
+      <a href="/events">Xem demo →</a>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🌐</div>
+      <h3>Request & Header</h3>
+      <p>Hiển thị URL, method, query params và toàn bộ request/response headers.</p>
+      <a href="/request">Xem demo →</a>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🌊</div>
+      <h3>4 Loại Stream</h3>
+      <p>Readable, Writable, Transform và Duplex stream với ví dụ thực tế.</p>
+      <a href="/streams">Xem demo →</a>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔧</div>
+      <h3>HTTP Thuần</h3>
+      <p>Xây dựng bằng module http của NodeJS, không dùng framework nào.</p>
+      <a href="/json">Xem JSON →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>NodeJS Blog TH6 &mdash; Xây dựng với HTTP module thuần &mdash; Không dùng Express</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Request - NodeJS Blog TH6</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&family=JetBrains+Mono:wght@400;600&display=swap');
+    :root { --ink:#1a1a2e; --paper:#faf8f3; --accent:#c0392b; --muted:#8a8a8a; --border:#e0dbd0; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--paper); color:var(--ink); font-family:'Source Sans 3',sans-serif; }
+    header { border-bottom:3px double var(--ink); padding:20px 48px; display:flex; align-items:center; justify-content:space-between; }
+    .logo { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:900; }
+    .logo span { color:var(--accent); }
+    nav a { margin-left:24px; text-decoration:none; color:var(--ink); font-size:0.8rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
+    nav a:hover { color:var(--accent); }
+    .page-header { padding:48px 48px 32px; border-bottom:1px solid var(--border); }
+    .page-header h1 { font-family:'Playfair Display',serif; font-size:3rem; font-weight:900; }
+    .page-header p { color:var(--muted); margin-top:8px; }
+    .content { padding:48px; display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+    .card { border:1px solid var(--border); padding:32px; }
+    .card h2 { font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:20px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+    .info-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); font-size:0.9rem; }
+    .info-row:last-child { border-bottom:none; }
+    .info-label { font-weight:600; color:var(--muted); font-size:0.8rem; letter-spacing:1px; text-transform:uppercase; }
+    .info-value { font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--accent); word-break:break-all; max-width:60%; text-align:right; }
+    .header-table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    .header-table th { text-align:left; padding:8px 12px; background:#1a1a2e; color:#a8d8ea; font-family:'JetBrains Mono',monospace; font-size:0.78rem; }
+    .header-table td { padding:8px 12px; border-bottom:1px solid var(--border); font-family:'JetBrains Mono',monospace; font-size:0.78rem; }
+    .header-table td:first-child { color:var(--accent); font-weight:600; }
+    .header-table tr:hover td { background:#f5f0e8; }
+    .full-width { grid-column:1/-1; }
+    .url-bar { background:#1a1a2e; padding:16px 20px; font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:#c3e88d; display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+    .method-badge { padding:4px 10px; font-size:0.75rem; font-weight:700; border-radius:2px; }
+    .method-get { background:#27ae60; color:#fff; }
+    .query-form { margin-top:20px; }
+    .query-form p { font-size:0.9rem; color:var(--muted); margin-bottom:12px; }
+    .query-form a { display:inline-block; margin:4px 4px 4px 0; padding:6px 14px; background:#f5f0e8; border:1px solid var(--border); text-decoration:none; color:var(--ink); font-size:0.8rem; font-family:'JetBrains Mono',monospace; transition:all 0.2s; }
+    .query-form a:hover { background:var(--ink); color:var(--paper); }
+    .res-header { background:#e8f5e9; border:1px solid #27ae60; padding:16px; margin-top:16px; }
+    .res-header p { font-size:0.8rem; color:#27ae60; font-family:'JetBrains Mono',monospace; line-height:1.8; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Node<span>JS</span> Blog</div>
+    <nav>
+      <a href="/">Trang chủ</a>
+      <a href="/events">Events</a>
+      <a href="/request">Request</a>
+      <a href="/streams">Streams</a>
+    </nav>
+  </header>
+
+  <div class="page-header">
+    <h1>🌐 Request & Header</h1>
+    <p>Hiển thị URL, method, query params và toàn bộ headers của request hiện tại</p>
+  </div>
+
+  <div class="content">
+    <!-- Request Info -->
+    <div class="card">
+      <h2>📋 Thông tin Request</h2>
+      <div class="url-bar">
+        <span class="method-badge method-get">__METHOD__</span>
+        <span>__FULL_URL__</span>
+      </div>
+      <div class="info-row"><span class="info-label">req.url</span><span class="info-value">__REQ_URL__</span></div>
+      <div class="info-row"><span class="info-label">Pathname</span><span class="info-value">__PATHNAME__</span></div>
+      <div class="info-row"><span class="info-label">Query String</span><span class="info-value">__QUERY_STRING__</span></div>
+      <div class="info-row"><span class="info-label">HTTP Version</span><span class="info-value">__HTTP_VERSION__</span></div>
+
+      <div style="margin-top:24px">
+        <div class="info-row" style="font-weight:700;color:var(--ink)"><span>Query Parameters</span></div>
+        __QUERY_PARAMS__
+      </div>
+
+      <div class="query-form">
+        <p>Thử thêm query params:</p>
+        <a href="/request?page=1&category=nodejs">?page=1&category=nodejs</a>
+        <a href="/request?search=stream&sort=desc">?search=stream&sort=desc</a>
+        <a href="/request?author=admin&limit=10">?author=admin&limit=10</a>
+      </div>
+    </div>
+
+    <!-- Request Headers -->
+    <div class="card">
+      <h2>📨 Request Headers</h2>
+      <p style="color:var(--muted);font-size:0.85rem;margin-bottom:16px">Dữ liệu từ <code style="background:#f5f0e8;padding:2px 6px">req.headers</code></p>
+      <table class="header-table">
+        <tr><th>Header Name</th><th>Value</th></tr>
+        __REQUEST_HEADERS__
+      </table>
+    </div>
+
+    <!-- Response Headers -->
+    <div class="card full-width">
+      <h2>📤 Response Headers đã thiết lập</h2>
+      <p style="color:var(--muted);font-size:0.85rem;margin-bottom:16px">Headers được set bằng <code style="background:#f5f0e8;padding:2px 6px">res.writeHead(200, {...})</code></p>
+      <div class="res-header">
+        <p>
+          HTTP/1.1 200 OK<br>
+          Content-Type: text/html; charset=utf-8<br>
+          X-Powered-By: NodeJS-TH6<br>
+          X-Page: request-info<br>
+          Cache-Control: no-cache<br>
+          X-Timestamp: __TIMESTAMP__
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
