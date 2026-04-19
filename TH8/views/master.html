@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Hệ thống Upload File</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; }
+        section { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+        h2 { margin-top: 0; color: #333; }
+    </style>
+</head>
+<body>
+
+    <section>
+        <form action="/upload-single" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file_don">
+            <button type="submit">Upload ngay</button>
+        </form>
+    </section>
+
+    <section>
+        <form action="/upload-multiple" method="POST" enctype="multipart/form-data">
+            <input type="file" name="files_nhieu" multiple>
+            <button type="submit">Upload tất cả</button>
+        </form>
+    </section>
+</body>
+</html>
