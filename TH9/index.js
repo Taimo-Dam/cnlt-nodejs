@@ -1,4 +1,3 @@
-// index.js - Main entry point
 
 const express = require("express");
 const session = require("express-session");
@@ -12,11 +11,9 @@ const heavyRoutes = require("./routes/heavyRoutes");
 const app = express();
 const PORT = 3000;
 
-// ─── Global Middleware ─────────────────────────────────────────────────────────
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// CORS for frontend (allow localhost with any port)
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (origin) res.setHeader("Access-Control-Allow-Origin", origin);
@@ -27,7 +24,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve frontend static files
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(session({
@@ -37,9 +33,8 @@ app.use(session({
   cookie: { secure: false, maxAge: 30 * 60 * 1000 } // 30 minutes
 }));
 
-app.use(logger); // Log every request
+app.use(logger); 
 
-// ─── Routes ───────────────────────────────────────────────────────────────────
 app.use("/", authRoutes);
 app.use("/students", studentRoutes);
 app.use("/", heavyRoutes);
